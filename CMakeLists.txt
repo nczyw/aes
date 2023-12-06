@@ -31,9 +31,14 @@ include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/aes/inc
     ${CMAKE_CURRENT_LIST_DIR}/aes/inc/aesni
 )
-#开启AES_NI功能
-set(QTAES_ENABLE_AESNI  ON)
-if(QTAES_ENABLE_AESNI)
+#获取编译器型号，MSVC不开启硬件加速，代码只支持GCC编译时，开启硬件加速
+set (Compiler ${CMAKE_CXX_COMPILER_ID})
+if(Compiler MATCHES "MSVC")
+    set(AES_ENABLE_AESNI  OFF)
+else()
+    set(AES_ENABLE_AESNI  ON)
+endif()
+if(AES_ENABLE_AESNI)
     message("Enable AES-NI")
     add_definitions(-DUSE_INTEL_AES_IF_AVAILABLE)
     set(AESNI
@@ -74,10 +79,13 @@ add_executable(${CMAKE_PROJECT_NAME}Test
 target_link_libraries(${CMAKE_PROJECT_NAME}Test PRIVATE
     ${LibName}
 )
-if(QTAES_ENABLE_AESNI)
+if(AES_ENABLE_AESNI)
     include(CheckCXXCompilerFlag)
     check_cxx_compiler_flag(-maes CXX_COMPILER_HAS_FLAG_MAES)
-   # message(${CXX_COMPILER_HAS_FLAG_MAES})
+    check_cxx_compiler_flag("/arch:AVX" CXX_COMPILER_HAS_ARCH_AVX)
+    IF(CXX_COMPILER_HAS_ARCH_AVX)
+	    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:AVX")
+    ENDIF()
     target_compile_options(${LibName}
         PRIVATE
         $<$<BOOL:${CXX_COMPILER_HAS_FLAG_MAES}>:-maes>
@@ -93,7 +101,7 @@ set(IncludeFile
 #设置编译输出目录
 set(CMAKE_INSTALL_PREFIX ${TARGET_DIR}/install)
 
-install(TARGETS ${LibName}
+install(TARGETS ${LibName} ${CMAKE_PROJECT_NAME}Test
     ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
     LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
     RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin

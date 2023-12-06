@@ -2,7 +2,11 @@
 #define AESNIKEYEXP_H
 
 #include <wmmintrin.h>
-
+/*
+#ifndef __GNUC__ // [
+#error "Use this header only with GCC compilers!"
+#endif // __GNUC__ ]
+*/
 #define cpuid(func, ax, bx, cx, dx)\
     __asm__ __volatile__("cpuid": "=a" (ax), "=b" (bx), "=c" (cx), "=d" (dx) : "a" (func));
 
