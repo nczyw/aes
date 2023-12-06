@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.27)
 #工程名字
 project(AES LANGUAGES CXX C)
-#使用C++ 17编译
+#使用C++ 17编译 , GCC对C++23支持不是很好
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

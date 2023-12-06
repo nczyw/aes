@@ -419,7 +419,7 @@ std::string AESEncryption::removePadding(const std::string& rawText)
         if (ret.at(marker_index) == '\x80')
         {
            // ret.truncate(marker_index);
-            ret = ret.substr(0, marker_index - 1);
+            ret = ret.substr(0, marker_index);
         }
         break;
     }
