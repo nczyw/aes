@@ -35,6 +35,8 @@ include_directories(
 #获取编译器型号，MSVC不开启硬件加速，代码只支持GCC编译时，开启硬件加速
 set (Compiler ${CMAKE_CXX_COMPILER_ID})
 if(Compiler MATCHES "MSVC")
+    # msvc要使用utf-8 with BOM，使用下面的代码改变为utf-8
+    add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>")
     set(AES_ENABLE_AESNI  OFF)
 else()
     set(AES_ENABLE_AESNI  ON)
@@ -69,8 +71,7 @@ set(AES_Project
     ${AES_Headers}
     ${AES_Sources}
 )
-# msvc要使用utf-8 with BOM，使用下面的代码改变为utf-8
-add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>") 
+ 
 
 #生成库文件
 set(LibName ${CMAKE_PROJECT_NAME})
