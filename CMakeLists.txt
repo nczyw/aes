@@ -69,6 +69,8 @@ set(AES_Project
     ${AES_Headers}
     ${AES_Sources}
 )
+# msvc要使用utf-8 with BOM，使用下面的代码改变为utf-8
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>") 
 
 #生成库文件
 set(LibName ${CMAKE_PROJECT_NAME})
