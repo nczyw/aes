@@ -1,11 +1,13 @@
 #include "aes.hpp"
 #include <cstring>
+#include <sstream>
 #ifdef USE_INTEL_AES_IF_AVAILABLE
 #include "aesni/aesni-key-exp.h"
 #include "aesni/aesni-key-init.h"
 #include "aesni/aesni-enc-ecb.h"
 #include "aesni/aesni-enc-cbc.h"
 #endif
+#include <iomanip>
 
 /*
  * Local Functions
@@ -428,6 +430,31 @@ std::string AESEncryption::removePadding(const std::string& rawText)
         break;
     }
     return ret;
+}
+
+std::string AESEncryption::stringToHex(const std::string &input)
+{
+    std::stringstream ss;
+
+    unsigned char ch;  
+   
+    for (char ch : input) {
+        ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(static_cast<unsigned char>(ch));
+    }
+    
+    return ss.str();
+}
+
+std::string AESEncryption::hexToString(const std::string &hexString)
+{
+    size_t hexLength = hexString.length();
+    std::string result;
+    for (size_t i = 0; i < hexLength; i += 2) {
+        std::string byteString = hexString.substr(i, 2);
+        char byte = static_cast<char>(std::stoi(byteString, nullptr, 16));
+        result += byte;
+    }
+    return result;
 }
 
 uint8_t AESEncryption::getSBoxValue(uint8_t num)

@@ -30,6 +30,7 @@ include_directories(
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/aes/inc
     ${CMAKE_CURRENT_LIST_DIR}/aes/inc/aesni
+    ${CMAKE_CURRENT_LIST_DIR}/base64/inc
 )
 #获取编译器型号，MSVC不开启硬件加速，代码只支持GCC编译时，开启硬件加速
 set (Compiler ${CMAKE_CXX_COMPILER_ID})
@@ -53,11 +54,13 @@ endif()
 #设置AES_头文件
 set(AES_Headers
     ${CMAKE_CURRENT_LIST_DIR}/aes/inc/aes.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/base64/inc/base64.hpp
     ${CMAKE_CURRENT_LIST_DIR}/aes/inc/exaes.hpp
 )
 #设置AES_源文件
 set(AES_Sources
     ${CMAKE_CURRENT_LIST_DIR}/aes/src/aes.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/base64/src/base64.cpp
     ${CMAKE_CURRENT_LIST_DIR}/aes/src/exaes.cpp
 )
 #合并工程文件

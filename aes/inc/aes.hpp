@@ -61,6 +61,22 @@ public:
      * \return decrypted cipher with padding removed
      */
     std::string removePadding(const std::string& rawText);
+    
+    /**
+     * @brief           string to hex
+     * 
+     * @param input     input string
+     * @return std::string      hex string
+     */
+    static std::string stringToHex(const std::string &input);
+
+    /**
+     * @brief           hex to string  
+     * 
+     * @param hexString     input hex string
+     * @return std::string  string
+     */
+    static std::string hexToString(const std::string &hexString);
 
 private:
     int m_nb;
