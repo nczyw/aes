@@ -1,4 +1,5 @@
 # C++ 实现AES加密解密
+* 你可以在任何平台编译生成动态或者静态数据库，来方便自己程序调用AES加解密dll，因为接口封装采用了C语言，所以dll支持标准的ABI，可以被任何语言调用
 * 代码为修改了仓库[Qt-AES](https://github.com/bricke/Qt-AES)而来，将原作者Qt版本的AES加密，修改为C++的.
 * 引用了仓库[BASE64加密解密](https://github.com/ReneNyffenegger/cpp-base64).
 * 使用C++17 编译 MinGW对C++ 23 不完全支持，生成的dll，报找不到入口
