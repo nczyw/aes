@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.27)
 #工程名字
-project(AES LANGUAGES CXX C)
+project(AES VERSION 1.0 LANGUAGES CXX C)
 #使用C++ 17编译 , GCC对C++23支持不是很好
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 17)
@@ -14,16 +14,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${TARGET_DIR}/target/)
 #设置动态库文件目录
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${TARGET_DIR}/target/)
 
-
 #设置可执行库文件目录
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TARGET_DIR}/target/)
-
-#设置编译类型
-# Debug Release RelWithDebInfo MinSizeRel
-set(Build_Type Release)
-set(CMAKE_BUILD_TYPE ${Build_Type}) #Mingw编译器使用
-set(CMAKE_CONFIGURATION_TYPES ${Build_Type})
-
 
 #设置头文件目录
 include_directories(
@@ -32,13 +24,21 @@ include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/aes/inc/aesni
     ${CMAKE_CURRENT_LIST_DIR}/base64/inc
 )
-#获取编译器型号，MSVC不开启硬件加速，代码只支持GCC编译时，开启硬件加速
+
+#设置编译类型
+# Debug Release RelWithDebInfo MinSizeRel
+set(Build_Type Release)
+#获取编译器型号，MSVC不开启硬件加速，代码支持GCC编译时，开启硬件加速
+#使用MSVC时，代码文件使用utf-8，而不是utf-8 with BOM
+#两种编译器，分别设置编译类型
 set (Compiler ${CMAKE_CXX_COMPILER_ID})
 if(Compiler MATCHES "MSVC")
+    set(CMAKE_CONFIGURATION_TYPES ${Build_Type})    #MSVC编译器使用
     # msvc要使用utf-8 with BOM，使用下面的代码改变为utf-8
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>")
     set(AES_ENABLE_AESNI  OFF)
 else()
+    set(CMAKE_BUILD_TYPE ${Build_Type}) #Mingw编译器使用
     set(AES_ENABLE_AESNI  ON)
 endif()
 if(AES_ENABLE_AESNI)
@@ -51,6 +51,7 @@ if(AES_ENABLE_AESNI)
         ${CMAKE_CURRENT_LIST_DIR}/aes/inc/aesni/aesni-key-init.h
     )
 else()
+    message("Disable AES-NI")
     set(AESNI "")
 endif()
 #设置AES_头文件
